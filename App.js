@@ -1,15 +1,31 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import { Orban } from './Orban'
+import { Counter, num } from './Counter'
+import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability';
 
 export default class App extends React.Component {
-  render() {
-    return (
-      /* 
-      <View style={styles.container}>
-      */
-      <View style={{fontSize: 200,  flex:1, alignItems: 'center', justifyContent: 'center'}}>
-        <Text style={{ fontSize: 72, fontWeight: 'bold' }}>O1G</Text>
-      </View>
+      constructor() { 
+        super()
+        this.state = {
+            count: 0,
+        }
+    }
+    
+    componentDidMount() {
+        setInterval(this.inc, 1000)
+    }
+    inc = () => {
+        this.setState(prevState => ({
+        count: prevState.count + 1,
+    }))
+  }
+   
+render() {
+  return (
+    <View style={styles.container}>
+        <Text style={styles.counter}>{this.state.count}</Text>
+    </View>
     );
   }
 }
@@ -20,5 +36,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  counter: {
+    fontSize: 72,
+    fontWeight: 'bold',
   },
 });
