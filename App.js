@@ -15,6 +15,15 @@ export default class App extends React.Component {
     componentDidMount() {
         setInterval(this.inc, 1000)
     }
+
+    componentDidUpdate() {
+        if (this.state.count == 10) {
+          this.setState(prevState => ({
+            count: 0,
+        })) 
+        }
+    }
+  
     inc = () => {
         this.setState(prevState => ({
         count: prevState.count + 1,
@@ -24,7 +33,8 @@ export default class App extends React.Component {
 render() {
   return (
     <View style={styles.container}>
-        <Text style={styles.counter}>{this.state.count}</Text>
+        <Text style={styles.counterWork}>{this.state.count}</Text>
+        <Text style={styles.counterRest}>{this.state.count}</Text>
     </View>
     );
   }
@@ -37,8 +47,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  counter: {
+  counterWork: {
     fontSize: 72,
     fontWeight: 'bold',
+    color: 'red',
+  },
+  counterRest: {
+    fontSize: 72,
+    fontWeight: 'bold',
+    color: 'green',
   },
 });
