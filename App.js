@@ -1,41 +1,12 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, Text, View } from 'react-native'
 import { Orban } from './Orban'
 import { Counter, num } from './Counter'
-import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability';
+import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability'
 import {vibrate} from './utils'
+import Clock from './Clock'
+import ChangeTimers from './ChangeTimers'
 
-class Clock extends React.Component {
-
-  constructor(props) {
-    super(props);
-    this.state = {date: new Date()};
-  }
-
-  componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-
-  tick() {
-    this.setState({
-      date: new Date()
-    });
-  }
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.counterRest}>It is {this.state.date.toLocaleTimeString()}.</Text>
-      </View>
-    );
-  }
-}
 
 export default class App extends React.Component {
       constructor() { 
@@ -43,12 +14,34 @@ export default class App extends React.Component {
         this.state = {
             countWork: 0,
             countRest:0,
+            started: false,
             workPhase: true,
+            showForm: false,
         }
     }
+
+    resetCounter = () => {
+      this.setState(prevState => ({
+        countWork: 0,
+        countRest:0,
+        started: false,
+      }))
+    }
     
+    letsStart = () => {
+      this.setState(prevState => ({started: true}))
+    }
+
+    letsStop = () => {
+      this.setState(prevState => ({started: false}))
+    }
+
+    toggleForm = () => {
+      this.setState(prevState => ({showForm: !prevState.showForm}))
+    }
+
     componentDidMount() {
-        setInterval(this.inc, 1000)
+      setInterval(this.inc, 1000)
     }
 
     componentDidUpdate() {
@@ -68,23 +61,31 @@ export default class App extends React.Component {
       }
   
     inc = () => {
-      if (this.state.workPhase) {
+      if (this.state.workPhase && this.state.started) {
         this.setState(prevState => ({
             countWork: prevState.countWork + 1,
         }))
-      } else {
+      } else if (!this.state.workPhase && this.state.started) {
         this.setState(prevState => ({
             countRest: prevState.countRest + 1,
-      
     }))
   }
   }
    
 render() {
+  
+  if (this.state.showForm) return <ChangeTimers/>
+  
   return (
     <View style={styles.container}>
         <Text style={styles.counterWork}>{this.state.countWork}</Text>
         <Text style={styles.counterRest}>{this.state.countRest}</Text>
+        <View>
+          <Button title="Start" onPress={this.letsStart} />
+          <Button title="Stop" onPress={this.letsStop} />
+          <Button title="Reset" onPress={this.resetCounter} />
+        </View>
+        <Button title="Set timers" onPress={this.toggleForm} />
         <Clock/>
     </View>
     );
