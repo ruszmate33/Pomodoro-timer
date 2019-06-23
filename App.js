@@ -12,7 +12,7 @@ export default class App extends React.Component {
       constructor() { 
         super()
         this.state = {
-            countWork: 0,
+            countWork: 20,
             countRest:0,
             started: false,
             workPhase: true,
@@ -22,9 +22,10 @@ export default class App extends React.Component {
 
     resetCounter = () => {
       this.setState(prevState => ({
-        countWork: 0,
+        countWork: 20,
         countRest:0,
         started: false,
+        workPhase: true,
       }))
     }
     
@@ -45,16 +46,16 @@ export default class App extends React.Component {
     }
 
     componentDidUpdate() {
-      if (this.state.workPhase && this.state.countWork == 10) {
+      if (this.state.workPhase && this.state.countWork == 0) {
         vibrate();
         this.setState(prevState => ({
-          countWork: 0,
+          countRest: 20,
           workPhase: false,
       }))
-      } else if (!this.state.workPhase && this.state.countRest == 10) {
+      } else if (!this.state.workPhase && this.state.countRest == 0) {
         vibrate();
         this.setState(prevState => ({
-          countRest: 0,
+          countWork: 20,
           workPhase: true,
         }))
         } 
@@ -63,11 +64,11 @@ export default class App extends React.Component {
     inc = () => {
       if (this.state.workPhase && this.state.started) {
         this.setState(prevState => ({
-            countWork: prevState.countWork + 1,
+            countWork: prevState.countWork - 1,
         }))
       } else if (!this.state.workPhase && this.state.started) {
         this.setState(prevState => ({
-            countRest: prevState.countRest + 1,
+            countRest: prevState.countRest - 1,
     }))
   }
   }
