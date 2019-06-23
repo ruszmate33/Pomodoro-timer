@@ -56,15 +56,30 @@ export default class App extends React.Component {
     toggleForm = () => {
       this.setState(prevState => ({showForm: !prevState.showForm}))
     }
-    /* 
+    
     updater = () => {
-      this.inc;
-      this.convertTimer;
+      if (this.state.workPhase && this.state.started) {
+        this.setState(prevState => ({
+            countWork: prevState.countWork - 1,
+            hoursWork: Math.floor((this.state.countWork % (60 * 60 * 24)) / (60 * 60)),
+            minutesWork: Math.floor((this.state.countWork % (60 * 60)) / (60)),
+            secondsWork: Math.floor(this.state.countWork % 60),
+        }))
+        //this.convertTimer();
+      } else if (!this.state.workPhase && this.state.started) {
+        this.setState(prevState => ({
+            countRest: prevState.countRest - 1,
+            hoursRest: Math.floor((this.state.countRest % (60 * 60 * 24)) / (60 * 60)),
+            minutesRest: Math.floor((this.state.countRest % (60 * 60)) / (60)),
+            secondsRest: Math.floor(this.state.countRest % 60),
+            }))
+        //this.convertTimer();
     }
-    */
+  }
+    
 
     componentDidMount() {
-      setInterval(this.inc, 1000);
+      setInterval(this.updater, 1000);
       //setInterval(this.convertTimer, 1000)
     }
 
