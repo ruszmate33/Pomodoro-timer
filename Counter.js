@@ -14,7 +14,7 @@ export dafault class Counter extends React.Component {
     
     render() {
         return (
-            <Text>this.convDispTime()</Text>
+            <Text>this.convDispTime(this.props.countWork)</Text>
         )
     }
 
