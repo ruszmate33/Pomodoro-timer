@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native'
-import { Orban } from './Orban'
+
 //import Counter from './Counter'
 import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability'
 import {vibrate} from './utils'
 import Clock from './Clock'
-import ChangeTimers from './ChangeTimers'
+//import ChangeTimers from './ChangeTimers'
 
 
 export default class App extends React.Component {
@@ -26,14 +26,14 @@ export default class App extends React.Component {
         }
     }
     convertTimer = () => {
-      this.setState(prevState => {
-          hoursWork: Math.floor((this.state.countWork % (60 * 60 * 24)) / (60 * 60));
-          minutesWork: Math.floor((this.state.countWork % (60 * 60)) / (60));
-          secondsWork: Math.floor(this.state.countWork % 60);
-          hoursRest: Math.floor((this.state.countRest % (60 * 60 * 24)) / (60 * 60));
-          minutesRest: Math.floor((this.state.countRest % (60 * 60)) / (60));
-          secondsRest: Math.floor(this.state.countRest % 60);
-      })
+      this.setState(prevState => 
+          ({hoursWork: Math.floor((this.state.countWork % (60 * 60 * 24)) / (60 * 60)),
+          minutesWork: Math.floor((this.state.countWork % (60 * 60)) / (60)),
+          secondsWork: Math.floor(this.state.countWork % 60),
+          hoursRest: Math.floor((this.state.countRest % (60 * 60 * 24)) / (60 * 60)),
+          minutesRest: Math.floor((this.state.countRest % (60 * 60)) / (60)),
+          secondsRest: Math.floor(this.state.countRest % 60),
+          }))
     }
     
     resetCounter = () => {
@@ -43,6 +43,7 @@ export default class App extends React.Component {
         started: false,
         workPhase: true,
       }))
+      this.convertTimer();
     }
     
     letsStart = () => {
@@ -56,12 +57,6 @@ export default class App extends React.Component {
     toggleForm = () => {
       this.setState(prevState => ({showForm: !prevState.showForm}))
     }
-    /* 
-    updater = () => {
-      this.inc;
-      this.convertTimer;
-    }
-    */
 
     componentDidMount() {
       setInterval(this.inc, 1000);
