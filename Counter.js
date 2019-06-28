@@ -2,22 +2,21 @@ import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native'
 
 export default class Counter extends React.Component {
-    /*
-     constructor() {
-        super();
-    }
-    */
-    convDispTime =(timeSec) => {
-        let min = Math.floor((this.state.countWork % (60 * 60)) / (60)),
-        let sec = Math.floor(this.state.countWork % 60),
-        let secSpace = sec > 9 ? '' : '0'
-        return `${min}:${secSpace}${sec}`
+    
+    constructor(props) {
+        super(props);
     }
     
-    render() {
-        return (
-            <Text>{this.convDispTime(this.props.countWork)}</Text>
-        )
+   convDispTime = (count) => {
+    const min = Math.floor((count % (60 * 60)) / (60))
+    const sec = Math.floor(count % 60)
+    const secSpace = sec > 9 ? '' : '0'
+    return `${min}:${secSpace}${sec}`
     }
 
+    render() {
+        return (
+            <Text>{this.convDispTime(this.props.count)}</Text>
+        )
+    }
 }

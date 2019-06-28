@@ -1,27 +1,10 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native'
 
-//import Counter from './Counter'
+import Counter from './Counter'
 import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability'
 import {vibrate} from './utils'
 import Clock from './Clock'
-//import ChangeTimers from './ChangeTimers'
-
-class Counter extends React.Component {
-  
-  convDispTime =(count) => {
-      const min = Math.floor((count % (60 * 60)) / (60))
-      const sec = Math.floor(count % 60)
-      const secSpace = sec > 9 ? '' : '0'
-      return `${min}:${secSpace}${sec}`
-  }
-  
-  render() {
-      return (
-          <Text>{this.convDispTime(this.props.count)}</Text>
-      )
-  }
-}
 
 export default class App extends React.Component {
       constructor() { 
