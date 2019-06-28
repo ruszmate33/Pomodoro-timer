@@ -29,7 +29,7 @@ export default class Clock extends React.Component {
     render() {
       return (
         <View style={styles.container}>
-          <Text style={styles.clockStyle}>It is {this.state.date.toLocaleTimeString()}.</Text>
+          <Text style={styles.clockStyle}>{this.state.date.toLocaleTimeString()}</Text>
         </View>
       );
     }
