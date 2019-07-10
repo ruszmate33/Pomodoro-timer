@@ -1,10 +1,12 @@
 import React from 'react';
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { TextInput, Button, StyleSheet, Text, View } from 'react-native'
 
 import Counter from './Counter'
 import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability'
 import {vibrate} from './utils'
 import Clock from './Clock'
+import ChangeTimers from './ChangeTimers'
+import PropTypes from 'prop-types';
 
 export default class App extends React.Component {
       constructor() { 
@@ -13,10 +15,16 @@ export default class App extends React.Component {
             timeSec: 25,
             started: false,
             workPhase: true,
-            showForm: false,
         }
     }
 
+    setNewTimer = newTimer => {
+      this.setState((newTimer) => ({
+        timeSec: newTimer,     
+      }))
+      console.log("setNewTimer newTimer: "+this.newTimer+" timeSec: "+this.state.timeSec)
+    }
+    
     resetCounter = () => {
       this.setState(prevState => ({
         timeSec: 25,
@@ -70,8 +78,6 @@ export default class App extends React.Component {
    
 render() {
   
-  if (this.state.showForm) return <ChangeTimers/>
-  
   if (this.state.workPhase) {
   return (
     <View style={styles.container}>
@@ -84,8 +90,8 @@ render() {
           <Button title="Stop" onPress={this.letsStop} />
           <Button title="Reset" onPress={this.resetCounter} />
         </View>
-        <Button title="Set timers" onPress={this.toggleForm} />
         <Clock/>
+        <ChangeTimers onSubmit={this.setNewTimer}/>
     </View>
     );
   } else {
@@ -125,5 +131,10 @@ const styles = StyleSheet.create({
     fontSize: 72,
     fontWeight: 'bold',
     color: 'green',
+  },
+  input: {
+    padding: 5,
+    borderColor: 'black',
+    borderWidth: 1,
   },
 });
