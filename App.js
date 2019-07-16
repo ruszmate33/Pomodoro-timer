@@ -12,6 +12,8 @@ export default class App extends React.Component {
       constructor() { 
         super()
         this.state = {
+            workTime: 25,
+            restTime: 5,
             timeSec: 25,
             started: false,
             workPhase: true,
@@ -20,14 +22,15 @@ export default class App extends React.Component {
 
     setNewTimer = newTimer => {
       this.setState({
-        timeSec: newTimer.newTimer,     
+        timeSec: newTimer.newTimer,
+        workTime: newTimer.newTimer,     
       })
       console.log("setNewTimer newTimer: "+newTimer+" timeSec: "+this.state.timeSec)
     }
     
     resetCounter = () => {
       this.setState(prevState => ({
-        timeSec: 25,
+        timeSec: workTime,
         started: false,
         workPhase: true,
       }))
@@ -54,15 +57,14 @@ export default class App extends React.Component {
       if (this.state.workPhase && this.state.timeSec == 0) {
         vibrate();
         this.setState(prevState => ({
-          timeSec: 5,
+          timeSec: prevState.restTime,
           workPhase: false,
-          
       }))
       //Rest phase is over
       } else if (!this.state.workPhase && this.state.timeSec == 0) {
         vibrate();
         this.setState(prevState => ({
-          timeSec: 25,
+          timeSec: prevState.workTime,
           workPhase: true,
         }))
         } 
