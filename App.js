@@ -19,10 +19,10 @@ export default class App extends React.Component {
     }
 
     setNewTimer = newTimer => {
-      this.setState((newTimer) => ({
-        timeSec: newTimer,     
-      }))
-      console.log("setNewTimer newTimer: "+this.newTimer+" timeSec: "+this.state.timeSec)
+      this.setState({
+        timeSec: newTimer.newTimer,     
+      })
+      console.log("setNewTimer newTimer: "+newTimer+" timeSec: "+this.state.timeSec)
     }
     
     resetCounter = () => {
