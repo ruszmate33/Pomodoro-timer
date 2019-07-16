@@ -22,18 +22,20 @@ export default class App extends React.Component {
 
     setNewTimer = newTimer => {
       this.setState({
-        timeSec: newTimer.newTimer,
-        workTime: newTimer.newTimer,     
+        timeSec: newTimer.workTime,
+        workTime: newTimer.workTime,
+        restTime: newTimer.restTime,
+        workPhase: true,     
       })
-      console.log("setNewTimer newTimer: "+newTimer+" timeSec: "+this.state.timeSec)
+      console.log("setNewTimer newTimer: "+this.state.workTime+" timeSec: "+this.state.restTime)
     }
     
     resetCounter = () => {
-      this.setState(prevState => ({
-        timeSec: workTime,
+      this.setState({
+        timeSec: this.state.workTime,
         started: false,
         workPhase: true,
-      }))
+      })
     }
     
     letsStart = () => {

@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 
 export default class ChangeTimers extends React.Component {
     state = {
-        newTimer: '',
+        workTime: '',
+        restTime: '',
     }
     /*
     static propTypes = {
@@ -12,15 +13,21 @@ export default class ChangeTimers extends React.Component {
     }
     */
     
-    handleTimeChange = newTimer => {
-        this.setState({newTimer})
-        console.log("handleTimeChange "+this.state.newTimer)
+    handleWorkTimeChange = workTime => {
+        this.setState({workTime})
+        console.log("handleWorkTimeChange "+this.state.workTime)
+    }
+
+    handleRestTimeChange = restTime => {
+        this.setState({restTime})
+        console.log("handleRestTimeChange "+this.state.restTime)
     }
     
     handleSubmit = () => {
-        this.props.onSubmit({newTimer: this.state.newTimer})
+        this.props.onSubmit(this.state)
+    
         //this.props.onSubmit(this.state)
-        console.log("handleSubmit "+this.state.newTimer)
+        console.log("handleSubmit workTime: "+this.state.workTime+" restTime: "+ this.state.restTime)
     }  
     
     render() {
@@ -28,10 +35,18 @@ export default class ChangeTimers extends React.Component {
             <View style={{paddingTop: 20}}> 
                 <TextInput 
                     style={styles.input} 
-                    onChangeText={this.handleTimeChange}
+                    onChangeText={this.handleWorkTimeChange}
                     //validation missing
-                    value={this.state.newTimer}
+                    value={this.state.workTime}
                     placeholder="new work time"
+                    keyboardType='numeric'
+                />
+                <TextInput 
+                    style={styles.input} 
+                    onChangeText={this.handleRestTimeChange}
+                    //validation missing
+                    value={this.state.restTime}
+                    placeholder="new rest time"
                     keyboardType='numeric'
                 />
                 <Button 
