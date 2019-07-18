@@ -6,6 +6,7 @@ export default class ChangeTimers extends React.Component {
     state = {
         workTime: '',
         restTime: '',
+        isFormValid: false,
     }
     /*
     static propTypes = {
@@ -14,18 +15,31 @@ export default class ChangeTimers extends React.Component {
     */
     
     handleWorkTimeChange = workTime => {
-        this.setState({workTime})
-        console.log("handleWorkTimeChange "+this.state.workTime)
+        if (+workTime >= 0) {
+            this.setState({workTime}, this.validateForm)
+            console.log("handleWorkTimeChange "+this.state.workTime)
+        }
     }
 
     handleRestTimeChange = restTime => {
-        this.setState({restTime})
-        console.log("handleRestTimeChange "+this.state.restTime)
+        if (+restTime >= 0) {
+            this.setState({restTime}, this.validateForm)
+            console.log("handleRestTimeChange "+this.state.restTime)
+        }
+    }
+
+    validateForm = () => {
+        if (+this.state.workTime >= 0 && +this.state.restTime >= 0) {
+            return this.setState({isFormValid: true})
+        } else {
+            return this.setState({isFormValid: false})
+        }
     }
     
     handleSubmit = () => {
-        this.props.onSubmit(this.state)
-    
+        if (this.validateForm) {
+            this.props.onSubmit(this.state)
+        }
         //this.props.onSubmit(this.state)
         console.log("handleSubmit workTime: "+this.state.workTime+" restTime: "+ this.state.restTime)
     }  
@@ -38,7 +52,7 @@ export default class ChangeTimers extends React.Component {
                     onChangeText={this.handleWorkTimeChange}
                     //validation missing
                     value={this.state.workTime}
-                    placeholder="new work time"
+                    placeholder="new work time [min]"
                     keyboardType='numeric'
                 />
                 <TextInput 
@@ -46,12 +60,13 @@ export default class ChangeTimers extends React.Component {
                     onChangeText={this.handleRestTimeChange}
                     //validation missing
                     value={this.state.restTime}
-                    placeholder="new rest time"
+                    placeholder="new rest time [min]"
                     keyboardType='numeric'
                 />
                 <Button 
                     title="Set timer" 
                     onPress={this.handleSubmit}
+                    disabled={!this.state.isFormValid}
                 />
             </View>
             );

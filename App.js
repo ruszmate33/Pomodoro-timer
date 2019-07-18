@@ -1,9 +1,9 @@
 import React from 'react';
-import { TextInput, Button, StyleSheet, Text, View } from 'react-native'
+import {Vibration, TextInput, Button, StyleSheet, Text, KeyboardAvoidingView, View } from 'react-native'
 
 import Counter from './Counter'
 import { throwIfAudioIsDisabled } from 'expo-av/build/Audio/AudioAvailability'
-import {vibrate} from './utils'
+/*import {vibrate} from './utils'*/
 import Clock from './Clock'
 import ChangeTimers from './ChangeTimers'
 import PropTypes from 'prop-types';
@@ -13,7 +13,7 @@ export default class App extends React.Component {
         super()
         this.state = {
             workTime: 25,
-            restTime: 5,
+            restTime: 5*60,
             timeSec: 25,
             started: false,
             workPhase: true,
@@ -22,9 +22,9 @@ export default class App extends React.Component {
 
     setNewTimer = newTimer => {
       this.setState({
-        timeSec: newTimer.workTime,
-        workTime: newTimer.workTime,
-        restTime: newTimer.restTime,
+        timeSec: 60*newTimer.workTime,
+        workTime: 60*newTimer.workTime,
+        restTime: 60*newTimer.restTime,
         workPhase: true,     
       })
       console.log("setNewTimer newTimer: "+this.state.workTime+" timeSec: "+this.state.restTime)
@@ -51,20 +51,24 @@ export default class App extends React.Component {
     }
 
     componentDidMount() {
-      setInterval(this.inc, 1000);
+      setInterval(this.decrement, 1000);
     }
 
     componentDidUpdate() {
-      //workphase is over
-      if (this.state.workPhase && this.state.timeSec == 0) {
-        vibrate();
+      //vibrate timer is at 0
+      if (this.state.timeSec == 0) {
+        Vibration.vibrate(500);
+        console.log("Buzz out m@#$%!");
+      } else if (this.state.workPhase && this.state.timeSec == -1) {
+        //workphase is over
         this.setState(prevState => ({
           timeSec: prevState.restTime,
           workPhase: false,
       }))
       //Rest phase is over
-      } else if (!this.state.workPhase && this.state.timeSec == 0) {
-        vibrate();
+      } else if (!this.state.workPhase && this.state.timeSec == -1) {
+        Vibration.vibrate(500);
+        console.log("Buzz out m@#$%!");
         this.setState(prevState => ({
           timeSec: prevState.workTime,
           workPhase: true,
@@ -72,7 +76,7 @@ export default class App extends React.Component {
         } 
       }
   
-    inc = () => {
+    decrement = () => {
       if (this.state.started) {
         this.setState(prevState => ({
             timeSec: prevState.timeSec - 1,
@@ -84,7 +88,7 @@ render() {
   
   if (this.state.workPhase) {
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView behavior="padding" style={styles.container}>
         <Text style={styles.counterWork}>
             <Counter count = {this.state.timeSec}/>
         </Text>
@@ -96,11 +100,11 @@ render() {
         </View>
         <Clock/>
         <ChangeTimers onSubmit={this.setNewTimer}/>
-    </View>
+    </KeyboardAvoidingView>
     );
   } else {
     return (
-      <View style={styles.container}>          
+      <KeyboardAvoidingView behavior="padding" style={styles.container}>          
           <Text style={styles.counterRest}>
               <Counter count = {this.state.timeSec}/>
           </Text>
@@ -110,9 +114,9 @@ render() {
             <Button title="Stop" onPress={this.letsStop} />
             <Button title="Reset" onPress={this.resetCounter} />
           </View>
-          <Button title="Set timers" onPress={this.toggleForm} />
           <Clock/>
-      </View>
+          <ChangeTimers onSubmit={this.setNewTimer}/>
+      </KeyboardAvoidingView>
       );
     }
   }
