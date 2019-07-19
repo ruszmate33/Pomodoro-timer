@@ -12,11 +12,11 @@ export default class App extends React.Component {
       constructor() { 
         super()
         this.state = {
-            workTime: 25,
+            workTime: 25*60,
             restTime: 5*60,
-            timeSec: 25,
+            timeSec: 25*60,
             started: false,
-            workPhase: true,
+            activePhase: "workPhase",
         }
     }
 
@@ -34,7 +34,7 @@ export default class App extends React.Component {
       this.setState({
         timeSec: this.state.workTime,
         started: false,
-        workPhase: true,
+        activePhase: 'workPhase',
       })
     }
     
@@ -56,22 +56,22 @@ export default class App extends React.Component {
 
     componentDidUpdate() {
       //vibrate timer is at 0
-      if (this.state.timeSec == 0) {
+      if (this.state.timeSec === 0) {
         Vibration.vibrate(500);
         console.log("Buzz out m@#$%!");
-      } else if (this.state.workPhase && this.state.timeSec == -1) {
+      } else if (((this.state.activePhase === 'workPhase') && this.state.timeSec === -1)) {
         //workphase is over
         this.setState(prevState => ({
           timeSec: prevState.restTime,
-          workPhase: false,
+          activePhase: 'restPhase',
       }))
-      //Rest phase is over
-      } else if (!this.state.workPhase && this.state.timeSec == -1) {
+      } else if (((this.state.activePhase === 'restPhase') && this.state.timeSec == -1)) {
+        //Rest phase is over
         Vibration.vibrate(500);
         console.log("Buzz out m@#$%!");
         this.setState(prevState => ({
           timeSec: prevState.workTime,
-          workPhase: true,
+          activePhase: 'workPhase',
         }))
         } 
       }
@@ -86,10 +86,9 @@ export default class App extends React.Component {
    
 render() {
   
-  if (this.state.workPhase) {
   return (
     <KeyboardAvoidingView behavior="padding" style={styles.container}>
-        <Text style={styles.counterWork}>
+        <Text style={this.state.activePhase === 'workPhase' ? styles.workPhase : styles.restPhase}>
             <Counter count = {this.state.timeSec}/>
         </Text>
   
@@ -102,23 +101,6 @@ render() {
         <ChangeTimers onSubmit={this.setNewTimer}/>
     </KeyboardAvoidingView>
     );
-  } else {
-    return (
-      <KeyboardAvoidingView behavior="padding" style={styles.container}>          
-          <Text style={styles.counterRest}>
-              <Counter count = {this.state.timeSec}/>
-          </Text>
-          
-          <View>
-            <Button title="Start" onPress={this.letsStart} />
-            <Button title="Stop" onPress={this.letsStop} />
-            <Button title="Reset" onPress={this.resetCounter} />
-          </View>
-          <Clock/>
-          <ChangeTimers onSubmit={this.setNewTimer}/>
-      </KeyboardAvoidingView>
-      );
-    }
   }
 }
 
@@ -130,12 +112,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  counterWork: {
+  workPhase: {
     fontSize: 72,
     fontWeight: 'bold',
     color: 'red',
   },
-  counterRest: {
+  restPhase: {
     fontSize: 72,
     fontWeight: 'bold',
     color: 'green',
